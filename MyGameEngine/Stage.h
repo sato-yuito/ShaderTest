@@ -5,6 +5,7 @@
 class Stage : public GameObject
 {
     int hModel_;    //ƒ‚ƒfƒ‹”Ô†
+    int hPict_;    //‰æ‘œ”Ô†
     int** table_;
     int width_, height_;
 public:

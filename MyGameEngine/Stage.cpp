@@ -1,5 +1,6 @@
 #include "Stage.h"
 #include "Engine/Model.h"
+#include"Engine/Sprite.h"
 //コンストラクタ
 Stage::Stage(GameObject* parent)
     :GameObject(parent, "Stage"), hModel_(-1)
@@ -11,18 +12,21 @@ Stage::~Stage()
 {
 }
 
+Sprite* pSprite = nullptr;
 //初期化
 void Stage::Initialize()
 {
     //モデルデータのロード
     hModel_ = Model::Load("assets/BoxDefault.fbx");
     assert(hModel_ >= 0);
+    pSprite = new Sprite;
+    pSprite->Initialize();
 }
 
 //更新
 void Stage::Update()
 {
-    transform_.rotate_.y += 0.5f;
+    // transform_.rotate_.y += 0.5f;
 }
 
 //描画
@@ -30,7 +34,7 @@ void Stage::Draw()
 {
     Model::SetTransform(hModel_, transform_);
     Model::Draw(hModel_);
-   
+    pSprite->Draw(transform_);
 }
 
 //開放

@@ -160,7 +160,7 @@ HRESULT Sprite::LoadTexture()
 {
 	HRESULT hr;
 	pTexture_ = new Texture;
-	hr= pTexture_->Load("Assets\\Dice.png");
+	hr= pTexture_->Load("Assets\\fuusen.png");
 	if (FAILED(hr))
 	{
 		//ƒGƒ‰[ˆ—
