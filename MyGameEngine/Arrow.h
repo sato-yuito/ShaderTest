@@ -1,13 +1,14 @@
 #pragma once
 #include "Engine/GameObject.h"
-class Player : public GameObject
+class Arrow : public GameObject
 {
+    int hModel_;    //モデル番号
 public:
     //コンストラクタ
-    Player(GameObject* parent);
+    Arrow(GameObject* parent);
 
     //デストラクタ
-    ~Player();
+    ~Arrow();
 
     //初期化
     void Initialize() override;
