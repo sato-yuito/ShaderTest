@@ -3,6 +3,7 @@
 #include"Engine/SceneManager.h"
 #include"Stage.h"
 #include"Ball.h"
+#include"Engine/Camera.h"
 TestScene::TestScene(GameObject* parent)
 	:GameObject(parent,"TestScene")
 {
@@ -12,6 +13,8 @@ void TestScene::Initialize()
 {
 	Instantiate<Stage>(this);
 	Instantiate<Ball>(this);
+
+	Camera::SetPosition(XMFLOAT3(7.5, 10, -5));
 }
 
 void TestScene::Update()
