@@ -21,6 +21,7 @@ namespace Camera
 	//焦点（見る位置）を設定
 	void SetTarget(XMVECTOR target);
 	void SetTarget(XMFLOAT3 target);
+	XMVECTOR GetPotion();
 	//ビュー行列を取得
 	XMMATRIX GetViewMatrix();
 
