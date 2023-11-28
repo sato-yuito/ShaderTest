@@ -13,8 +13,8 @@ cbuffer global
 	float4x4	matWVP;			// ワールド・ビュー・プロジェクションの合成行列
 	float4x4	matNormal;           // ワールド行列
 	float4		diffuseColor;		// ディフューズカラー（マテリアルの色）
-	float4       eyePos;
-	float4      lightVec;
+	float4       eyePos;//視点
+	float4      lightVec;//
 	bool		isTexture;		// テクスチャ貼ってあるかどうか
 };
 
@@ -59,6 +59,7 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 ambentSource = float4(0.2, 0.2, 0.2, 1.0);
 	float4 diffuse;
 	float4 ambient;
+  
 
 	if (isTexture == false)
 	{
