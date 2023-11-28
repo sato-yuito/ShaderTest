@@ -238,7 +238,9 @@ void Fbx::Draw(Transform& transform)
 	  cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
 	  cb.diffuseColor = pMaterialList_[i].diffuse;
 	  cb.isTexture = pMaterialList_[i].pTexture != nullptr;
-	
+	  cb.lightVec =XMFLOAT4(1.0,1.0,1.0,0);
+	  XMStoreFloat4(&cb.eyePos,Camera::GetEyePosition());
+
 	  D3D11_MAPPED_SUBRESOURCE pdata;
 	  Direct3D::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
 	  memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));	// データを値を送る

@@ -25,7 +25,9 @@ class Fbx
 		XMMATRIX	matWVP;
 		XMMATRIX	matNormal;
 		XMFLOAT4	diffuseColor;		// ディフューズカラー（マテリアルの色）
-		int 	    isTexture;		// テクスチャ貼ってあるかどうか
+		XMFLOAT4    eyePos;
+		XMFLOAT4    lightVec;
+		BOOL 	    isTexture;		// テクスチャ貼ってあるかどうか
 	};
 
 	struct VERTEX
