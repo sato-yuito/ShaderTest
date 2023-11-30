@@ -10,11 +10,11 @@ SamplerState	g_sampler : register(s0);	//サンプラー
 //───────────────────────────────────────
 cbuffer global
 {
-	float4x4	matWVP;			// ワールド・ビュー・プロジェクションの合成行列
+	float4x4	matWVP;			      // ワールド・ビュー・プロジェクションの合成行列
 	float4x4	matNormal;           // ワールド行列
 	float4		diffuseColor;		// ディフューズカラー（マテリアルの色）
-	float4       eyePos;//視点
-	float4      lightVec;//
+	float4       eyePos;           //視点
+	float4      lightVec;         //
 	bool		isTexture;		// テクスチャ貼ってあるかどうか
 };
 
