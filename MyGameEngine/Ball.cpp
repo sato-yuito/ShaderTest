@@ -22,6 +22,7 @@ void Ball::Initialize()
 
 void Ball::Update()
 {
+    transform_.rotate_.z += 0.5f;
 }
 
 void Ball::Draw()

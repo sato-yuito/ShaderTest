@@ -26,6 +26,7 @@ struct VS_OUT
 	float4 pos  : SV_POSITION;	//位置
 	float2 uv	: TEXCOORD;		//UV座標
 	float4 color	: COLOR;	//色（明るさ）
+
 };
 
 //───────────────────────────────────────
@@ -64,12 +65,12 @@ float4 PS(VS_OUT inData) : SV_Target
 	if (isTexture == false)
 	{
 		diffuse = lightSource * diffuseColor * inData.color;
-		ambient = lightSource * diffuseColor * ambentSource * 2.0;
+		ambient = lightSource * diffuseColor * ambentSource;
 	}
 	else
 	{
 		diffuse = lightSource * g_texture.Sample(g_sampler, inData.uv) * inData.color;
-		ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambentSource * 2.0;
+		ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambentSource;
 	}
 
 	return diffuse + ambient;
