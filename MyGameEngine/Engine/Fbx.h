@@ -22,8 +22,9 @@ class Fbx
 
 	struct CONSTANT_BUFFER
 	{
-		XMMATRIX	matWVP;
-		XMMATRIX	matNormal;
+		XMMATRIX	matWVP;//ワールドビュープロジェクションの行列を渡している変数
+		XMMATRIX    matW;//ワールド変換のみ
+		XMMATRIX	matNormal;//スケール*並行行列の逆行列
 		XMFLOAT4	diffuseColor;		// ディフューズカラー（マテリアルの色）
 		XMFLOAT4    eyePos;
 		XMFLOAT4    lightVec;
@@ -59,5 +60,6 @@ public:
 	HRESULT Load(std::string fileName);
 	void    Draw(Transform& transform);
 	void    Release();
+	void lightSorcePosition();
 };
 
