@@ -11,7 +11,7 @@ SamplerState	g_sampler : register(s0);	//サンプラー
 cbuffer global
 {
 	float4x4	matWVP;			      // ワールド・ビュー・プロジェクションの合成行列
-	float4x4    matW
+	float4x4    matW;
 	float4x4	matNormal;           // ワールド行列
 	float4		diffuseColor;		// ディフューズカラー（マテリアルの色）
 	float4       eyePos;           //視点
@@ -28,7 +28,7 @@ struct VS_OUT
 	float2 uv	: TEXCOORD;		//UV座標
 	float4 color	: COLOR;	//色（明るさ）
 	float4 eyev  :  POSITION;
-	flaot4 normal : NORMAL;
+	float4 normal : NORMAL;
 
 
 };
@@ -39,18 +39,23 @@ struct VS_OUT
 VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 {
 	//ピクセルシェーダーへ渡す情報
-	VS_OUT outData;
+	VS_OUT outData = (VS_OUT)0;
 
 	//ローカル座標に、ワールド・ビュー・プロジェクション行列をかけて
 	//スクリーン座標に変換し、ピクセルシェーダーへ
 	outData.pos = mul(pos, matWVP);
 	outData.uv = uv;
+	normal.w = 0;
+	normal= mul(normal, matNormal);
+	normal = normalize(normal);
+	outData.normal = normal;
 
-	normal = mul(normal, matNormal);
 	float4 light = normalize(lightVec);
 	light = normalize(light);
-	outData.color = clamp(dot(normal, light), 0, 1);
 
+	outData.color = saturate(dot(normal, normalize(light)));
+	float4 posw = mul(pos, matW);
+	outData.eyev = eyePos - posw;
 	//まとめて出力
 	return outData;
 }
@@ -64,7 +69,9 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 ambentSource = float4(0.2, 0.2, 0.2, 1.0);
 	float4 diffuse;
 	float4 ambient;
-	flaot4 NL();
+	float4 NL = saturate(dot(inData.normal, normalize(lightVec)));
+	float4 reflect = normalize(2 * NL * inData.normal - normalize(lightVec));
+	float4 specular = pow(saturate(dot(reflect, normalize(inData.eyev))), 8);
 
 	if (isTexture == false)
 	{
@@ -77,7 +84,7 @@ float4 PS(VS_OUT inData) : SV_Target
 		ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambentSource;
 	}
 
-	return diffuse + ambient;
+	return diffuse + ambient+ specular;
 
 
 }
