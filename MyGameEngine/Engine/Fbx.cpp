@@ -219,9 +219,12 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 			pMaterialList_[i].pTexture = nullptr;
 
 			//マテリアルの色
-			FbxSurfaceLambert* pMaterial = (FbxSurfaceLambert*)pNode->GetMaterial(i);
+			FbxSurfacePhong* pMaterial = (FbxSurfacePhong*)pNode->GetMaterial(i);
 			FbxDouble3  diffuse = pMaterial->Diffuse;
+			FbxDouble3 specular = FbxDouble3(0, 0, 0);
+			
 			pMaterialList_[i].diffuse = XMFLOAT4((float)diffuse[0], (float)diffuse[1], (float)diffuse[2], 1.0f);
+			
 		}
 	}
 }
@@ -239,6 +242,7 @@ void Fbx::Draw(Transform& transform)
 	  cb.matW = XMMatrixTranspose(transform.GetWorldMatrix());
 	  cb.diffuseColor = pMaterialList_[i].diffuse;
 	  cb.lightVec = XMFLOAT4(1, 5, 0, 1);  
+	  cb.speculer = XMFLOAT4(0, 0, 0, 0);
 	  XMStoreFloat4(&cb.eyePos,Camera::GetEyePosition());
 	  cb.isTexture = pMaterialList_[i].pTexture != nullptr;
 	  D3D11_MAPPED_SUBRESOURCE pdata;

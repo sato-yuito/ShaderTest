@@ -28,6 +28,8 @@ class Fbx
 		XMFLOAT4	diffuseColor;		// ディフューズカラー（マテリアルの色）
 		XMFLOAT4    eyePos;
 		XMFLOAT4    lightVec;
+		XMFLOAT4    speculer;
+		FLOAT       shininess;
 		BOOL 	    isTexture;		// テクスチャ貼ってあるかどうか
 	};
 
