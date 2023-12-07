@@ -242,7 +242,6 @@ void Fbx::Draw(Transform& transform)
 	  cb.matW = XMMatrixTranspose(transform.GetWorldMatrix());
 	  cb.diffuseColor = pMaterialList_[i].diffuse;
 	  cb.lightVec = XMFLOAT4(1, 5, 0, 1);  
-	  cb.speculer = XMFLOAT4(0, 0, 0, 0);
 	  XMStoreFloat4(&cb.eyePos,Camera::GetEyePosition());
 	  cb.isTexture = pMaterialList_[i].pTexture != nullptr;
 	  D3D11_MAPPED_SUBRESOURCE pdata;

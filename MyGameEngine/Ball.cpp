@@ -16,8 +16,6 @@ void Ball::Initialize()
     hModel_ = Model::Load("Assets/ball.fbx");
     assert(hModel_ >= 0);
     transform_.position_.y = 1.5f;
-  
-
 }
 
 void Ball::Update()
