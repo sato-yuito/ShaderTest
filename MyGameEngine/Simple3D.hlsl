@@ -8,17 +8,20 @@ SamplerState	g_sampler : register(s0);	//サンプラー
 // コンスタントバッファ
 // DirectX 側から送信されてくる、ポリゴン頂点以外の諸情報の定義
 //───────────────────────────────────────
-cbuffer global
+cbuffer global:register(b0)
 {
 	float4x4	matWVP;			      // ワールド・ビュー・プロジェクションの合成行列
 	float4x4    matW;
 	float4x4	matNormal;           // ワールド行列
 	float4		diffuseColor;		// ディフューズカラー（マテリアルの色）
-	float4       eyePos;           //視点
-	float4      lightVec;         //
 	bool		isTexture;		// テクスチャ貼ってあるかどうか
 };
 
+cbuffer global:register(b1)
+{
+	float4       eyePos;           //視点
+	float4      lightPos;
+};
 //───────────────────────────────────────
 // 頂点シェーダー出力＆ピクセルシェーダー入力データ構造体
 //───────────────────────────────────────
@@ -50,7 +53,7 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 	normal = normalize(normal);
 	outData.normal = normal;
 
-	float4 light = normalize(lightVec);
+	float4 light = normalize(lightPos);
 	light = normalize(light);
 
 	outData.color = saturate(dot(normal, normalize(light)));
@@ -69,8 +72,8 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 ambentSource = float4(0.2, 0.2, 0.2, 1.0);
 	float4 diffuse;
 	float4 ambient;
-	float4 NL = saturate(dot(inData.normal, normalize(lightVec)));
-	float4 reflect = normalize(2 * NL * inData.normal - normalize(lightVec));
+	float4 NL = saturate(dot(inData.normal, normalize(lightPos)));
+	float4 reflect = normalize(2 * NL * inData.normal - normalize(lightPos));
 	float4 specular = pow(saturate(dot(reflect, normalize(inData.eyev))), 8);
 
 	if (isTexture == false)

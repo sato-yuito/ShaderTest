@@ -26,10 +26,10 @@ class Fbx
 		XMMATRIX    matW;//ワールド変換のみ
 		XMMATRIX	matNormal;//スケール*並行行列の逆行列
 		XMFLOAT4	diffuseColor;		// ディフューズカラー（マテリアルの色）
-		XMFLOAT4    eyePos;
-		XMFLOAT4    lightVec;
+		/*XMFLOAT4    eyePos;
+		XMFLOAT4    lightPos;
 		XMFLOAT4    speculer;
-		FLOAT       shininess;
+		FLOAT       shininess;*/
 		BOOL 	    isTexture;		// テクスチャ貼ってあるかどうか
 	};
 
