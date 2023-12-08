@@ -5,7 +5,7 @@
 
 namespace
 {
-    const XMFLOAT4 DEF_LightPos = { 1,5,1,0 };
+    const XMFLOAT4 DEF_LightPos = { 1,2,1,0 };
 }
 void Stage::InitConstantBuffer()
 {
