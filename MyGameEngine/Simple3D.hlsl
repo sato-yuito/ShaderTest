@@ -19,8 +19,9 @@ cbuffer global:register(b0)
 
 cbuffer global:register(b1)
 {
-	float4       eyePos;           //視点
 	float4      lightPos;
+	float4       eyePos;           //視点
+	
 };
 //───────────────────────────────────────
 // 頂点シェーダー出力＆ピクセルシェーダー入力データ構造体
