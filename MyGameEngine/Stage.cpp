@@ -44,6 +44,9 @@ void Stage::Initialize()
     hModel_ = Model::Load("assets/Ground.fbx");
     assert(hModel_ >= 0);
 	InitConstantBuffer();
+
+	Camera::SetPosition(XMVECTOR{ 0, 0, -5, 0 });
+	Camera::SetTarget(XMVECTOR{ 0, 0, 0, 0 });
 }
 
 //çXêV
