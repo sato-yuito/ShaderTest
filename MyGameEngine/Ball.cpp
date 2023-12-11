@@ -13,14 +13,14 @@ Ball::~Ball()
 void Ball::Initialize()
 {
     //モデルデータのロード
-    hModel_ = Model::Load("Assets/ball.fbx");
+    hModel_ = Model::Load("Assets/donuts.fbx");
     assert(hModel_ >= 0);
-    transform_.position_.y = 1.5f;
+    transform_.position_.y = 5.2f;
 }
 
 void Ball::Update()
 {
-    transform_.rotate_.z += 0.5f;
+    transform_.rotate_.y += 0.5f;
 }
 
 void Ball::Draw()

@@ -10,16 +10,16 @@ SamplerState	g_sampler : register(s0);	//サンプラー
 //───────────────────────────────────────
 cbuffer global:register(b0)
 {
-	float4x4	matWVP;			      // ワールド・ビュー・プロジェクションの合成行列
-	float4x4    matW;
+	float4x4	matWVP;			       // ワールド・ビュー・プロジェクションの合成行列
+	float4x4    matW;                 //ワールド行列
 	float4x4	matNormal;           // ワールド行列
 	float4		diffuseColor;		// ディフューズカラー（マテリアルの色）
-	bool		isTexture;		// テクスチャ貼ってあるかどうか
+	bool		isTexture;		   // テクスチャ貼ってあるかどうか
 };
 
 cbuffer global:register(b1)
 {
-	float4      lightPos;
+	float4      lightPos;           //ライトの位置
 	float4       eyePos;           //視点
 	
 };
