@@ -1,6 +1,6 @@
 #include "Ball.h"
 #include "Engine/Model.h"
-
+#include"Engine/Input.h"
 Ball::Ball(GameObject* parent) :GameObject(parent, "Ball"), hModel_(-1)
 {
 
@@ -20,7 +20,16 @@ void Ball::Initialize()
 
 void Ball::Update()
 {
-    transform_.rotate_.y += 0.5f;
+    if (Input::IsKey(DIK_LEFT))
+    {
+        transform_.rotate_.y -= 0.5f;
+    }
+
+    if (Input::IsKey(DIK_RIGHT))
+    {
+        transform_.rotate_.y += 0.5f;
+    }
+    
 }
 
 void Ball::Draw()
