@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include <d3d11.h>
+
 struct CBUFF_STAGESCENE
 {
     XMFLOAT4 lightPos;
@@ -11,6 +12,10 @@ struct CBUFF_STAGESCENE
 class Stage : public GameObject
 {
     int hModel_;    //ÉÇÉfÉãî‘çÜ
+    int hLightBall_;
+
+    Transform trLightBall;
+
     ID3D11Buffer* pCBStageScene_;
     void InitConstantBuffer();
     XMFLOAT4 lightSorcePosition;
