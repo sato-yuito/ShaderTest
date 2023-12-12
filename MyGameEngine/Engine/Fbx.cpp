@@ -198,7 +198,8 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 		}
 		pMaterialList_[i].diffuse = XMFLOAT4{ diffuse[0],diffuse[1] ,diffuse[2] ,1.0f };
 		pMaterialList_[i].ambient = XMFLOAT4{ ambient[0],ambient[0] ,ambient[0] ,1.0f };
-		
+		pMaterialList_[i].specular = XMFLOAT4(0, 0, 0, 0);
+		pMaterialList_[i].shiness = 1;
 		//テクスチャ情報
 		FbxProperty  lProperty = pMaterial->FindProperty(FbxSurfaceMaterial::sDiffuse);
 
@@ -250,6 +251,9 @@ void Fbx::Draw(Transform& transform)
 	  cb.matWVP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
 	  cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
 	  cb.matW = XMMatrixTranspose(transform.GetWorldMatrix());
+	  cb.ambient = pMaterialList_[i].ambient;
+	  cb.speculer = pMaterialList_[i].specular;
+	  cb.shininess = pMaterialList_[i].shiness;
 	  cb.diffuseColor = pMaterialList_[i].diffuse;
 	/*  cb.lightPos = XMFLOAT4(1, 5, 0, 1);  
 	  XMStoreFloat4(&cb.eyePos,Camera::GetEyePosition());*/
