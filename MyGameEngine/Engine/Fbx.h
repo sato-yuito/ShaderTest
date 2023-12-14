@@ -20,7 +20,7 @@ class Fbx
 		XMFLOAT4 diffuse;
 		XMFLOAT4 ambient;
 		XMFLOAT4 specular;
-		FLOAT shininess;
+		float shininess;
 	};
 
 	struct CONSTANT_BUFFER
@@ -31,7 +31,7 @@ class Fbx
 		XMFLOAT4	diffuseColor;		// ディフューズカラー（マテリアルの色）
 		XMFLOAT4    ambient;
 		XMFLOAT4    speculer;
-		FLOAT       shininess;
+		float       shininess;
 		BOOL 	    isTexture;		// テクスチャ貼ってあるかどうか
 	};
 
