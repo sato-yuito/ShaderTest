@@ -16,7 +16,7 @@ cbuffer global:register(b0)
 	float4		diffuseColor;		// ディフューズカラー（マテリアルの色）
 	float4     ambient;
 	float4     speculer;
-	float      shininess;
+	float     shininess;
 	bool		isTexture;		   // テクスチャ貼ってあるかどうか
 };
 
