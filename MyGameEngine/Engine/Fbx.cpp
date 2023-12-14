@@ -197,7 +197,7 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 			FbxDouble  shiness = pMaterial->Shininess;
 		}
 		pMaterialList_[i].diffuse = XMFLOAT4{ diffuse[0],diffuse[1] ,diffuse[2] ,1.0f };
-		pMaterialList_[i].ambient = XMFLOAT4{ ambient[0],ambient[0] ,ambient[0] ,1.0f };
+		pMaterialList_[i].ambient = XMFLOAT4{ ambient[0],ambient[1] ,ambient[2] ,1.0f };
 		pMaterialList_[i].specular = XMFLOAT4(0, 0, 0, 0);
 		pMaterialList_[i].shiness = 1;
 		//テクスチャ情報
