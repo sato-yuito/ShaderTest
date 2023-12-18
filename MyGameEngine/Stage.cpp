@@ -40,9 +40,9 @@ Stage::~Stage()
 //初期化
 void Stage::Initialize()
 {
-    //モデルデータのロード
-    hModel_ = Model::Load("assets/Ground.fbx");
-    assert(hModel_ >= 0);
+    ////モデルデータのロード
+    //hModel_ = Model::Load("assets/Ground.fbx");
+    //assert(hModel_ >= 0);
 	hLightBall_ = Model::Load("assets/LightBall.fbx");
 	assert(hLightBall_ >= 0);
 
@@ -93,8 +93,8 @@ void Stage::Update()
 //描画
 void Stage::Draw()
 {
-    Model::SetTransform(hModel_, transform_);
-    Model::Draw(hModel_);
+    /*Model::SetTransform(hModel_, transform_);
+    Model::Draw(hModel_);*/
 	Model::SetTransform(hLightBall_, trLightBall);
 	Model::Draw(hLightBall_);
 }
