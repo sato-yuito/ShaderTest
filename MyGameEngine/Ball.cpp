@@ -15,7 +15,9 @@ void Ball::Initialize()
     //モデルデータのロード
     hModel_ = Model::Load("Assets/donuts.fbx");
     assert(hModel_ >= 0);
-    transform_.position_.y = 5.2f;
+    transform_.position_ = { 0,2,0 };
+    transform_.rotate_ = { 0,0,0 };
+    transform_.scale_ = { 1,1,1 };
 }
 
 void Ball::Update()

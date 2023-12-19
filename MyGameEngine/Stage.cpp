@@ -46,8 +46,8 @@ void Stage::Initialize()
 	hLightBall_ = Model::Load("assets/LightBall.fbx");
 	assert(hLightBall_ >= 0);
 
-	Camera::SetPosition(XMVECTOR{ 0, 0, -5, 0 });
-	Camera::SetTarget(XMVECTOR{ 0, 0, 0, 0 });
+	Camera::SetPosition(XMVECTOR{ 0, 10, -20, 0 });
+	Camera::SetTarget(XMVECTOR{ 0, 2, 0, 0 });
 
 	trLightBall.position_ = { 0, 0, 0 };
 	trLightBall.rotate_ = { 0, 0, 0 };

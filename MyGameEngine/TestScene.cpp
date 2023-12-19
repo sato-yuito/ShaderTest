@@ -16,7 +16,7 @@ void TestScene::Initialize()
 	Instantiate<Ball>(this);
 	Instantiate<Arrow>(this);
 
-	Camera::SetPosition(XMFLOAT3(7.5, 10, -5));
+	
 }
 
 void TestScene::Update()
