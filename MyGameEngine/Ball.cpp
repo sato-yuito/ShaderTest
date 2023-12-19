@@ -22,15 +22,12 @@ void Ball::Initialize()
 
 void Ball::Update()
 {
-    if (Input::IsKey(DIK_LEFT))
-    {
-        transform_.rotate_.y -= 0.5f;
-    }
-
-    if (Input::IsKey(DIK_RIGHT))
-    {
+    
+    
         transform_.rotate_.y += 0.5f;
-    }
+    
+
+  
     
 }
 
