@@ -47,10 +47,6 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 	//ピクセルシェーダーへ渡す情報
 	VS_OUT outData = (VS_OUT)0;
 
-	normal.w = 0;
-	normal = mul(normal, matNormal);
-	normal = normalize(normal);
-	outData.normal = normal;
 
 	//ローカル座標に、ワールド・ビュー・プロジェクション行列をかけて
 	//スクリーン座標に変換し、ピクセルシェーダーへ
@@ -58,6 +54,11 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 	pos = pos + normal * 0.04;
 	outData.uv = uv;
 	
+
+	normal.w = 0;
+	normal = mul(normal, matNormal);
+	normal = normalize(normal);
+	outData.normal = normal;
 
 	float4 light = normalize(lightPos);
 	//light = normalize(light);
