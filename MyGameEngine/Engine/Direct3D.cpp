@@ -361,7 +361,7 @@ HRESULT Direct3D::InitShaderToon()
 
 	//ラスタライザ作成
 	D3D11_RASTERIZER_DESC rdc = {};
-	rdc.CullMode = D3D11_CULL_FRONT;
+	rdc.CullMode = D3D11_CULL_BACK;
 	rdc.FillMode = D3D11_FILL_SOLID;
 	rdc.FrontCounterClockwise = FALSE;
 	hr = pDevice_->CreateRasterizerState(&rdc, &(shaderBundle[SHADER_TOON].pRasterizerState_));
@@ -377,6 +377,7 @@ HRESULT Direct3D::InitShaderToon()
 
 HRESULT Direct3D::ToonEdgeShader()
 {
+
 	using namespace Direct3D;
 	HRESULT hr;
 	// 頂点シェーダの作成（コンパイル）

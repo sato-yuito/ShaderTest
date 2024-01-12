@@ -44,30 +44,13 @@ struct VS_OUT
 //───────────────────────────────────────
 VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 {
-	//ピクセルシェーダーへ渡す情報
 	VS_OUT outData = (VS_OUT)0;
-
-
 	//ローカル座標に、ワールド・ビュー・プロジェクション行列をかけて
 	//スクリーン座標に変換し、ピクセルシェーダーへ
-	outData.pos = mul(pos, matWVP);
-	pos = pos + normal * 0.04;
-	outData.uv = uv;
 	
-
 	normal.w = 0;
-	normal = mul(normal, matNormal);
-	normal = normalize(normal);
-	outData.normal = normal;
-
-	float4 light = normalize(lightPos);
-	//light = normalize(light);
-
-	outData.color = saturate(dot(normal, light));
-	float4 posw = mul(pos, matW);
-	outData.eyev = eyePos - posw;
-
-	//まとめて出力
+	pos = pos + normal * 0.05f;
+	outData.pos =mul(pos, matWVP);
 	return outData;
 }
 
@@ -77,37 +60,9 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 float4 PS(VS_OUT inData) : SV_Target
 {
 
-	return (0.0,0.0,0.0,0.0);
+	return (0,0,0,0);
    
    
-	float4 lightSource = float4(1.0, 1.0, 1.0, 1.0);
-	float4 ambentSource = ambient;
-	float4 diffuse;
-	float4 ambient;
-	float4 NL = dot(inData.normal, normalize(lightPos));
-	float4 reflect = normalize(2 * NL * inData.normal - normalize(lightPos));
-	float4 pspecular = pow(saturate(dot(reflect, normalize(inData.eyev))), shininess) * speculer;
-
 	
-
-	float2 uv;
-	uv.x = inData.color.x;
-	uv.y = abs(dot(inData.normal, normalize(inData.eyev)));
-
-
-	float4 tI = toon_texture.Sample(g_sampler,uv);
-	if (isTexture == false)
-	{
-		diffuse = lightSource * diffuseColor * tI;
-		ambient = lightSource * diffuseColor * ambentSource;
-	}
-	else
-	{
-		diffuse = lightSource * g_texture.Sample(g_sampler, inData.uv) * tI;
-		ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambentSource;
-	}
-
-	return diffuse + ambient;
-
 	
 }
