@@ -81,6 +81,7 @@
     <FxCompile Include="Simple2D.hlsl" />
     <FxCompile Include="ToonShader.hlsl" />
     <FxCompile Include="ToonEdge.hlsl" />
+    <FxCompile Include="NormalMapping.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
