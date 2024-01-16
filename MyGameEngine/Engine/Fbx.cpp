@@ -92,17 +92,31 @@ void Fbx::InitVertex(fbxsdk::FbxMesh* mesh)
 	}
 
 	//面の数
-	for (int i = 0; i < polygonCount_; i++)
+	for (int poly = 0; poly < polygonCount_; poly++) 
 	{
-		int sIndex = mesh->GetPolygonVertexIndex(i);
-		FbxGeometryElementTangent* t = mesh->GetElementTangent(0);
-		FbxVector4 tangent = t->GetDirectArray().GetAt(sIndex).mData;
-		for (int j = 0; j < 3; j++)
+		int sIndex = mesh->GetPolygonVertexIndex(poly);
+		FbxGeometryElementTangent* pTangent = mesh->GetElementTangent(0);
+		if (pTangent != nullptr) 
 		{
-			int index = mesh->GetPolygonVertices()[sIndex + j];
-			vertices[index].tangent = { (float)tangent[0],(float)tangent[1] ,(float)tangent[2] ,(float)tangent[3] };
+			for (int i = 0; i < 3; i++) 
+			{
+				FbxVector4 tanVec = pTangent->GetDirectArray().GetAt(sIndex).mData;
+				int index = mesh->GetPolygonVertices()[sIndex + i];
+				vertices[index].tangent = 
+				{
+					(float)tanVec[0],(float)tanVec[0], (float)tanVec[0], (float)tanVec[0]
+				};
+			}
+		}
+		else {
+			for (int i = 0; i < 3; i++) {
+				int index = mesh->GetPolygonVertices()[sIndex + i];
+				vertices[index].tangent = { 0.0f, 0.0f, 0.0f, 0.0f };
+			}
 		}
 	}
+
+
 	//頂点バッファ
 	HRESULT hr;
 	D3D11_BUFFER_DESC bd_vertex;
@@ -304,10 +318,10 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 void Fbx::Draw(Transform& transform)
 {
 	
-	Direct3D::SetShader(SHADER_Edge);
+	Direct3D::SetShader(SHADER_NORMALMAP);
 
 	transform.Calclation();//トランスフォームを計算
-  for (int i = 0; i < materialCount_; i++)
+    for (int i = 0; i < materialCount_; i++)
   {
 	  //コンスタントバッファに情報を渡す
 	  CONSTANT_BUFFER cb;
@@ -364,7 +378,7 @@ void Fbx::Draw(Transform& transform)
 		//描画
 		Direct3D::pContext_->DrawIndexed(indexCount_[i], 0, 0);
 
-		Direct3D::SetShader(SHADER_TOON);
+		//Direct3D::SetShader(SHADER_TOON);
 
    }
 }

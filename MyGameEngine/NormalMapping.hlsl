@@ -51,8 +51,9 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 //───────────────────────────────────────
 // ピクセルシェーダ
 //───────────────────────────────────────
-float4 PS(VS_OUT inData) : SV_Target
+float4 PS(VS_OUT inData) : SV_TARGET0
 {
+
 	float4 lightSource = float4(1.0, 1.0, 1.0, 1.0);
 	float4 ambentSource = float4(0.2, 0.2, 0.2, 1.0);
 	float4 diffuse;
@@ -61,6 +62,7 @@ float4 PS(VS_OUT inData) : SV_Target
 	{
 		diffuse = lightSource * diffuseColor * inData.color;
 		ambient = lightSource * diffuseColor * ambentSource;
+		return diffuseColor;
 	}
 	else
 	{
