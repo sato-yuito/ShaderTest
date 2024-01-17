@@ -10,10 +10,14 @@ SamplerState	g_sampler : register(s0);	//サンプラー
 //───────────────────────────────────────
 cbuffer global
 {
-	float4x4	matWVP;			// ワールド・ビュー・プロジェクションの合成行列
+	float4x4	matWVP;			       // ワールド・ビュー・プロジェクションの合成行列
+	float4x4    matW;                 //ワールド行列
 	float4x4	matNormal;           // ワールド行列
 	float4		diffuseColor;		// ディフューズカラー（マテリアルの色）
-	bool		isTexture;		// テクスチャ貼ってあるかどうか
+	float4     ambient;
+	float4     speculer;
+	float     shininess;
+	bool		isTexture;		   // テクスチャ貼ってあるかどうか
 };
 
 //───────────────────────────────────────
@@ -51,7 +55,7 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 //───────────────────────────────────────
 // ピクセルシェーダ
 //───────────────────────────────────────
-float4 PS(VS_OUT inData) : SV_TARGET0
+float4 PS(VS_OUT inData) : SV_Target
 {
 
 	float4 lightSource = float4(1.0, 1.0, 1.0, 1.0);
@@ -62,7 +66,6 @@ float4 PS(VS_OUT inData) : SV_TARGET0
 	{
 		diffuse = lightSource * diffuseColor * inData.color;
 		ambient = lightSource * diffuseColor * ambentSource;
-		return diffuseColor;
 	}
 	else
 	{
@@ -71,5 +74,6 @@ float4 PS(VS_OUT inData) : SV_TARGET0
 
 	}
 	return diffuse + ambient;
-
+	//return float4(0, 0, 0, 0);
+//	return diffuseColor;
 }

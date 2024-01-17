@@ -47,7 +47,7 @@ HRESULT Sprite::Initialize()
 
 void Sprite::Draw(Transform&transform)
 {
-	Direct3D::SetShader(SHADER_2D);
+	//Direct3D::SetShader(SHADER_2D);
 	transform.Calclation();
 	//コンスタントバッファに渡す情報
 	PassDataToCB(transform.GetWorldMatrix());
