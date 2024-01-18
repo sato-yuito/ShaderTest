@@ -34,6 +34,7 @@ class Fbx
 		XMFLOAT4    speculer;
 		float       shininess;
 		BOOL 	    isTexture;		// テクスチャ貼ってあるかどうか
+		BOOL        hasNormalMap;
 	};
 
 	struct VERTEX

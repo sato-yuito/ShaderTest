@@ -90,29 +90,21 @@ void Fbx::InitVertex(fbxsdk::FbxMesh* mesh)
 			vertices[index].normal = XMVectorSet((float)Normal[0], (float)Normal[1], (float)Normal[2], 0.0f);
 		}
 	}
-
-	//面の数
+	FbxGeometryElementTangent* t = mesh->GetElementTangent(0);
+	//tangent取得
 	for (int poly = 0; poly < polygonCount_; poly++) 
 	{
+	
+		FbxVector4 tangent{ 0,0,0,0 };
 		int sIndex = mesh->GetPolygonVertexIndex(poly);
-		FbxGeometryElementTangent* pTangent = mesh->GetElementTangent(0);
-		if (pTangent != nullptr) 
+		if (t)
 		{
-			for (int i = 0; i < 3; i++) 
-			{
-				FbxVector4 tanVec = pTangent->GetDirectArray().GetAt(sIndex).mData;
-				int index = mesh->GetPolygonVertices()[sIndex + i];
-				vertices[index].tangent = 
-				{
-					(float)tanVec[0],(float)tanVec[0], (float)tanVec[0], (float)tanVec[0]
-				};
-			}
+			tangent = t->GetDirectArray().GetAt(sIndex).mData;
 		}
-		else {
-			for (int i = 0; i < 3; i++) {
-				int index = mesh->GetPolygonVertices()[sIndex + i];
-				vertices[index].tangent = { 0.0f, 0.0f, 0.0f, 0.0f };
-			}
+		for (int j = 0; j < 3; j++)
+		{
+			int index = mesh->GetPolygonVertices()[sIndex + j];
+			vertices[index].tangent = XMVectorSet((float)tangent[0], (float)tangent[1], (float)tangent[2],0.0f);
 		}
 	}
 
@@ -281,7 +273,7 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 		{
 
 			//テクスチャ情報
-			FbxProperty  lProperty = pMaterial->FindProperty(FbxSurfaceMaterial::sNormalMap);
+			FbxProperty  lProperty = pMaterial->FindProperty(FbxSurfaceMaterial::sBump);
 
 			//テクスチャの数数
 			int fileTextureCount = lProperty.GetSrcObjectCount<FbxFileTexture>();
@@ -333,17 +325,11 @@ void Fbx::Draw(Transform& transform)
 	  cb.speculer = pMaterialList_[i].specular;
 	  cb.shininess = pMaterialList_[i].shininess;
 	  cb.diffuseColor = pMaterialList_[i].diffuse;
-	/*  cb.lightPos = XMFLOAT4(1, 5, 0, 1);  
-	  XMStoreFloat4(&cb.eyePos,Camera::GetEyePosition());*/
+	
 	  cb.isTexture = pMaterialList_[i].pTexture != nullptr;
-
-	  //D3D11_MAPPED_SUBRESOURCE pdata;
-	  //Direct3D::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
-	  //memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));	// データを値を送る
-
-
-
-	    Direct3D::pContext_->UpdateSubresource(pConstantBuffer_, 0,NULL,&cb,0,0);	//再開
+	  cb.hasNormalMap = pMaterialList_[i].pNormalTexture != nullptr;
+	
+	 Direct3D::pContext_->UpdateSubresource(pConstantBuffer_, 0,NULL,&cb,0,0);	//再開
 
 	  //頂点バッファ、インデックスバッファ、コンスタントバッファをパイプラインにセット
 	  //頂点バッファ
