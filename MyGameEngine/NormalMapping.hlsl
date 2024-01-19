@@ -81,7 +81,7 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL,fl
 	light = normalize(light);
 
 	outData.color = mul(light, normal);
-
+	outData.color.w = 0.0;
 	outData.light.x = dot(light, tangent);
 	outData.light.y = dot(light, binormal);
 	outData.light.z = dot(light, normal);
@@ -101,7 +101,10 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 ambient;
 	if (hasNormalMap)
 	{
-		inData.light = normlize(inData.light);
+		float4 tmpNormal = normalTex.Sample(g_sampler, inData.uv) * 2.0f - 1.0f;
+		tmpNormal.w = 0;
+		tmpNormal = normlize(tmpNormal);
 
+		float4 NL = clamp(dot(tmpNormal, inData.light), 0, 1);
 	}
 }
