@@ -17,8 +17,8 @@ cbuffer global:register(b0)
 	float4     ambient;
 	float4     speculer;
 	float     shininess;
-	bool		isTexture;		   // テクスチャ貼ってあるかどうか
-	bool       hasNormalMap;
+	int		isTexture;		   // テクスチャ貼ってあるかどうか
+	int     hasNormalMap;
 };
 
 cbuffer gmodel:register(b1)
@@ -59,6 +59,7 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL,fl
 
 	normal.w = 0;
 	normal = mul(normal, matNormal);
+	normal = normalize(normal);
 	outData.normal = normal;
 
 	tangent.w = 0;
@@ -69,7 +70,7 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL,fl
 	binormal = normalize(binormal);
 
 	float4 posw = mul(pos, matW);
-	outData.eyev = eyePos - posw;
+	outData.eyev = normalize(posw-eyePos);
 
 	outData.Neyev.x = dot(outData.eyev, tangent);
 	outData.Neyev.y = dot(outData.eyev, binormal);
@@ -77,10 +78,12 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL,fl
 	outData.Neyev.w = 0;
 
 	float4 light = normalize(lightPos);
+	light.w = 0.0;
 	light = normalize(light);
 
 	outData.color = mul(light, normal);
 	outData.color.w = 0.0;
+
 	outData.light.x = dot(light, tangent);
 	outData.light.y = dot(light, binormal);
 	outData.light.z = dot(light, normal);
