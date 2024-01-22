@@ -318,9 +318,9 @@ void Fbx::Draw(Transform& transform)
 	  //コンスタントバッファに情報を渡す
 	  CONSTANT_BUFFER cb;
 	  cb.matWVP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
-	  cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
 	  cb.matW = XMMatrixTranspose(transform.GetWorldMatrix());
-
+	  cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
+	  
 	  cb.ambient = pMaterialList_[i].ambient;
 	  cb.speculer = pMaterialList_[i].specular;
 	  cb.shininess = pMaterialList_[i].shininess;
