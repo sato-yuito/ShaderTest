@@ -31,7 +31,7 @@ class Fbx
 		XMMATRIX	matNormal;//スケール*並行行列の逆行列
 		XMFLOAT4	diffuseColor;		// ディフューズカラー（マテリアルの色）
 		XMFLOAT4    ambient;
-		XMFLOAT4    speculer;
+		XMFLOAT4    speculerColor;
 		float       shininess;
 		BOOL 	    isTexture;		// テクスチャ貼ってあるかどうか
 		BOOL        hasNormalMap;

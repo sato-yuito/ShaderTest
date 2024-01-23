@@ -15,7 +15,7 @@ cbuffer global:register(b0)
 	float4x4	matNormal;           // ワールド行列
 	float4		diffuseColor;		// ディフューズカラー（マテリアルの色）
 	float4     ambient;
-	float4     speculer;
+	float4     speculerColor;
 	float     shininess;
 	int		isTexture;		   // テクスチャ貼ってあるかどうか
 	int     hasNormalMap;
@@ -101,6 +101,7 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 lightSource = float4(1.0, 1.0, 1.0, 1.0);
 	float4 diffuse;
 	float4 ambient;
+	float4 Specular;
 	if (hasNormalMap)
 	{
 		float4 tmpNormal = normalTeX.Sample(g_sampler, inData.uv) * 2.0f - 1.0f;
@@ -110,7 +111,7 @@ float4 PS(VS_OUT inData) : SV_Target
 		float4 NL = clamp(dot(tmpNormal, inData.light), 0, 1);
 
 		float4 reflection = reflect(-inData.light, tmpNormal);
-		float4 Specular = pow(saturate(dot(reflection, inData.Neyev)), shininess) * speculer;
+		float4 Specular = pow(saturate(dot(reflection, inData.Neyev)), shininess) * speculerColor;
 		if (hasNormalMap != 0)
 		{
 			diffuse = g_texture.Sample(g_sampler, inData.uv) * NL;
@@ -129,7 +130,7 @@ float4 PS(VS_OUT inData) : SV_Target
 	{
 		float4 reflection = reflect(normalize(lightPos), inData.normal);
 
-		float4 Specular = pow(saturate(dot(normalize(reflection), inData.eyev)), shininess) * speculer;
+		float4 Specular = pow(saturate(dot(normalize(reflection), inData.eyev)), shininess) * speculerColor;
 		if (isTexture == 0)
 		{
 			diffuse = lightSource * diffuseColor * inData.color;
@@ -140,6 +141,9 @@ float4 PS(VS_OUT inData) : SV_Target
 			diffuse = lightSource * g_texture.Sample(g_sampler, inData.uv) * inData.color;
 			ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambient;
 		}
-		return diffuse;
+		float4 result = diffuse + ambient + Specular;
+		if (isTexture)
+			result.a = inData.uv.x;
+		return result;
 	}
 }

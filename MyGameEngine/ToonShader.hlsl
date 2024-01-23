@@ -16,7 +16,7 @@ cbuffer global:register(b0)
 	float4x4	matNormal;           // ワールド行列
 	float4		diffuseColor;		// ディフューズカラー（マテリアルの色）
 	float4     ambient;
-	float4     speculer;
+	float4    speculerColor;
 	float     shininess;
 	bool		isTexture;		   // テクスチャ貼ってあるかどうか
 };
@@ -78,7 +78,7 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 ambient;
 	float4 NL = dot(inData.normal, normalize(lightPos));
 	float4 reflect = normalize(2 * NL * inData.normal - normalize(lightPos));
-	float4 pspecular = pow(saturate(dot(reflect, normalize(inData.eyev))), shininess) * speculer;
+	float4 pspecular = pow(saturate(dot(reflect, normalize(inData.eyev))), shininess) * speculerColor;
 
 	float2 uv;
 	uv.x = inData.color.x;
