@@ -321,7 +321,7 @@ void Fbx::Draw(Transform& transform)
 	  cb.matW = XMMatrixTranspose(transform.GetWorldMatrix());
 	  cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
 	  
-	  cb.ambient = pMaterialList_[i].ambient;
+	  cb.ambientColor = pMaterialList_[i].ambient;
 	  cb.speculerColor = pMaterialList_[i].specular;
 	  cb.shininess = pMaterialList_[i].shininess;
 	  cb.diffuseColor = pMaterialList_[i].diffuse;

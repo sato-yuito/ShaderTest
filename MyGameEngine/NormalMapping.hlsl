@@ -14,7 +14,7 @@ cbuffer global:register(b0)
 	float4x4    matW;                 //ワールド行列
 	float4x4	matNormal;           // ワールド行列
 	float4		diffuseColor;		// ディフューズカラー（マテリアルの色）
-	float4     ambient;
+	float4    ambientColor;
 	float4     speculerColor;
 	float     shininess;
 	int		isTexture;		   // テクスチャ貼ってあるかどうか
@@ -37,9 +37,9 @@ struct VS_OUT
 	float2 uv	 : TEXCOORD;		//UV座標
 	float4 eyev  :  POSITION;
 	float4 Neyev : POSITION1;
-	float4 normal: POSITION2;
-	float4 light : POSITION3;
-	float4 color : POSITION4;	//色（明るさ）
+	float4 light : POSITION2;
+	float4 normal: NORMAL;
+	float4 color : COLOR;	//色（明るさ）
 };
 
 //───────────────────────────────────────
@@ -60,6 +60,7 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL,fl
 	normal.w = 0;
 	normal = mul(normal, matNormal);
 	normal = normalize(normal);
+
 	outData.normal = normal;
 
 	tangent.w = 0;
@@ -69,20 +70,20 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL,fl
 	binormal = mul(binormal, matNormal);
 	binormal = normalize(binormal);
 
+	
+	float4 light = normalize(lightPos);
+	outData.color = saturate(dot(normal, light));
+
+	
 	float4 posw = mul(pos, matW);
-	outData.eyev = normalize(posw-eyePos);
+	outData.eyev = normalize(eyePos- posw);
 
 	outData.Neyev.x = dot(outData.eyev, tangent);
 	outData.Neyev.y = dot(outData.eyev, binormal);
 	outData.Neyev.z = dot(outData.eyev, normal);
 	outData.Neyev.w = 0;
 
-	float4 light = normalize(lightPos);
-	light.w = 0.0;
-	light = normalize(light);
-
-	outData.color = mul(light, normal);
-	outData.color.w = 0.0;
+	
 
 	outData.light.x = dot(light, tangent);
 	outData.light.y = dot(light, binormal);
@@ -102,25 +103,27 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 diffuse;
 	float4 ambient;
 	float4 Specular;
-	if (hasNormalMap)
-	{
+	
+	if (hasNormalMap){
+		inData.light = normalize(inData.light);
+
 		float4 tmpNormal = normalTeX.Sample(g_sampler, inData.uv) * 2.0f - 1.0f;
 		tmpNormal.w = 0;
 		tmpNormal = normalize(tmpNormal);
 
 		float4 NL = clamp(dot(tmpNormal, inData.light), 0, 1);
 
-		float4 reflection = reflect(-inData.light, tmpNormal);
+		float4 reflection = reflect(normalize(lightPos), tmpNormal);
 		float4 Specular = pow(saturate(dot(reflection, inData.Neyev)), shininess) * speculerColor;
-		if (hasNormalMap != 0)
+		if (isTexture)
 		{
 			diffuse = g_texture.Sample(g_sampler, inData.uv) * NL;
-			ambient = g_texture.Sample(g_sampler, inData.uv) * ambient;
+			ambient = g_texture.Sample(g_sampler, inData.uv) * ambientColor;
 		}
 		else
 		{
 			diffuse = diffuseColor * NL;
-			ambient = diffuseColor * ambient;
+			ambient = diffuseColor * ambientColor;
 		}
 
 
@@ -131,15 +134,15 @@ float4 PS(VS_OUT inData) : SV_Target
 		float4 reflection = reflect(normalize(lightPos), inData.normal);
 
 		float4 Specular = pow(saturate(dot(normalize(reflection), inData.eyev)), shininess) * speculerColor;
-		if (isTexture == 0)
+		if (isTexture)
 		{
 			diffuse = lightSource * diffuseColor * inData.color;
-			ambient = lightSource * diffuseColor * ambient;
+			ambient = lightSource * diffuseColor * ambientColor;
 		}
 		else
 		{
 			diffuse = lightSource * g_texture.Sample(g_sampler, inData.uv) * inData.color;
-			ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambient;
+			ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambientColor;
 		}
 		float4 result = diffuse + ambient + Specular;
 		if (isTexture)
