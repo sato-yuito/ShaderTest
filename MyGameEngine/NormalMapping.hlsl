@@ -55,35 +55,32 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL,fl
 	outData.pos = mul(pos, matWVP);
 	outData.uv = (float2)uv;
 
-	float3 binormal = cross(normal, tangent);
-
-	normal.w = 0;
-	normal = mul(normal, matNormal);
-	normal = normalize(normal);
-
-	outData.normal = normal;
-
-	tangent.w = 0;
-	tangent = mul(tangent, matNormal);
-	tangent = normalize(tangent);
-
+	float3 tmp = cross(tangent, normal);
+	float4 binormal = { tmp,0 };
 	binormal = mul(binormal, matNormal);
 	binormal = normalize(binormal);
 
-	
-	float4 light = normalize(lightPos);
-	outData.color = saturate(dot(normal, light));
+	normal.w = 0;
+	outData.normal = normalize(mul(normal, matNormal));
 
-	
-	float4 posw = mul(pos, matW);
-	outData.eyev = normalize(eyePos- posw);
+	tangent = mul(tangent, matNormal);
+	tangent.w = 0;
+	tangent = normalize(tangent);
+
+	float posw = mul(pos, matW);
+	outData.eyev = normalize(posw - eyePos);
 
 	outData.Neyev.x = dot(outData.eyev, tangent);
 	outData.Neyev.y = dot(outData.eyev, binormal);
 	outData.Neyev.z = dot(outData.eyev, normal);
 	outData.Neyev.w = 0;
 
-	
+	float4 light = normalize(lightPos);
+	light.w = 0;
+	light = normalize(light);
+
+	outData.color = mul(light, outData.normal);
+	outData.color.w = 0.0f;
 
 	outData.light.x = dot(light, tangent);
 	outData.light.y = dot(light, binormal);
@@ -105,36 +102,36 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 Specular;
 	
 	if (hasNormalMap){
-		inData.light = normalize(inData.light);
+		
 
 		float4 tmpNormal = normalTeX.Sample(g_sampler, inData.uv) * 2.0f - 1.0f;
-		tmpNormal.w = 0;
 		tmpNormal = normalize(tmpNormal);
+		tmpNormal.w = 0;
 
-		float4 NL = clamp(dot(tmpNormal, inData.light), 0, 1);
+		float4 NL = clamp(dot(normalize(inData.light), tmpNormal), 0, 1);
 
-		float4 reflection = reflect(normalize(lightPos), tmpNormal);
-		Specular = pow(saturate(dot(reflection, inData.Neyev)), shininess) * speculerColor;
-		if (isTexture)
+		float4 reflection = reflect(normalize(inData.light), tmpNormal);
+		float4 Specular = pow(saturate(dot(reflection, inData.Neyev)), shininess) * speculerColor;
+		if (isTexture!=0)
 		{
-			diffuse = g_texture.Sample(g_sampler, inData.uv) * NL;
-			ambient = g_texture.Sample(g_sampler, inData.uv) * ambientColor;
+			diffuse = lightSource*g_texture.Sample(g_sampler, inData.uv) * NL;
+			ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambientColor;
 		}
 		else
 		{
-			diffuse = diffuseColor * NL;
-			ambient = diffuseColor * ambientColor;
+			diffuse = lightSource * diffuseColor * NL;
+			ambient = lightSource * diffuseColor * ambientColor;
 		}
 
 
-		return diffuse ;
+		return ambient+ diffuse+Specular  ;
 	}
 	else
 	{
 		float4 reflection = reflect(normalize(lightPos), inData.normal);
 
-		float4 Specular = pow(saturate(dot(normalize(reflection), inData.eyev)), shininess) * speculerColor;
-		if (isTexture)
+		float4 Specular = pow(saturate(dot(reflection, inData.eyev)), shininess) * speculerColor;
+		if (isTexture==0)
 		{
 			diffuse = lightSource * diffuseColor * inData.color;
 			ambient = lightSource * diffuseColor * ambientColor;
@@ -144,7 +141,9 @@ float4 PS(VS_OUT inData) : SV_Target
 			diffuse = lightSource * g_texture.Sample(g_sampler, inData.uv) * inData.color;
 			ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambientColor;
 		}
-		 return  diffuse + ambient + Specular;
+		 return   diffuse + ambient + Specular;
+	
+
 		
 	}
 }
