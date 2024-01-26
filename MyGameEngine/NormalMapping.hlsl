@@ -25,7 +25,6 @@ cbuffer gmodel:register(b1)
 {
 	float4      lightPos;           //ライトの位置
 	float4       eyePos;           //視点
-
 };
 
 //───────────────────────────────────────
@@ -37,8 +36,8 @@ struct VS_OUT
 	float2 uv	 : TEXCOORD;		//UV座標
 	float4 eyev  :  POSITION;
 	float4 Neyev : POSITION1;
-	float4 light : POSITION2;
 	float4 normal: NORMAL;
+	float4 light : POSITION2;
 	float4 color : COLOR;	//色（明るさ）
 };
 
@@ -55,8 +54,8 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL,fl
 	outData.pos = mul(pos, matWVP);
 	outData.uv = (float2)uv;
 
-	float3 tmp = cross(tangent, normal);
-	float4 binormal = { tmp,0 };
+	float3 binormal = cross(tangent, normal);
+	//float4 binormal = { tmp,0 };
 	binormal = mul(binormal, matNormal);
 	binormal = normalize(binormal);
 
@@ -101,6 +100,8 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 ambient;
 	float4 Specular;
 	
+
+
 	if (hasNormalMap){
 		
 
@@ -123,8 +124,8 @@ float4 PS(VS_OUT inData) : SV_Target
 			ambient = lightSource * diffuseColor * ambientColor;
 		}
 
-
-		return ambient+ diffuse+Specular  ;
+		
+		return   Specular;
 	}
 	else
 	{
@@ -141,7 +142,7 @@ float4 PS(VS_OUT inData) : SV_Target
 			diffuse = lightSource * g_texture.Sample(g_sampler, inData.uv) * inData.color;
 			ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambientColor;
 		}
-		 return   diffuse + ambient + Specular;
+		 return   Specular ;
 	
 
 		

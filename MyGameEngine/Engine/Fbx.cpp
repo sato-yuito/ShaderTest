@@ -260,13 +260,6 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 			else
 			{
 				pMaterialList_[i].pTexture = nullptr;
-
-				//マテリアルの色
-				FbxSurfacePhong* pMaterial = (FbxSurfacePhong*)pNode->GetMaterial(i);
-				FbxDouble3  diffuse = pMaterial->Diffuse;
-				FbxDouble3 specular = FbxDouble3(0, 0, 0);
-
-				pMaterialList_[i].diffuse = XMFLOAT4((float)diffuse[0], (float)diffuse[1], (float)diffuse[2], 1.0f);
 			}
 		}
 		//ノーマルマップ用
@@ -358,8 +351,7 @@ void Fbx::Draw(Transform& transform)
 			ID3D11ShaderResourceView* pSRV = pMaterialList_[i].pNormalTexture->GetSRV();
 			Direct3D::pContext_->PSSetShaderResources(1, 1, &pSRV);
 		}
-		ID3D11ShaderResourceView* pSRVToon = pToonTex_->GetSRV();
-		Direct3D::pContext_->PSSetShaderResources(1, 1, &pSRVToon);
+		
 
 		//描画
 		Direct3D::pContext_->DrawIndexed(indexCount_[i], 0, 0);
