@@ -55,19 +55,18 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL,fl
 	outData.uv = (float2)uv;
 
 	float3 binormal = cross(tangent, normal);
-	//float4 binormal = { tmp,0 };
 	binormal = mul(binormal, matNormal);
 	binormal = normalize(binormal);
 
-	normal.w = 0;
 	outData.normal = normalize(mul(normal, matNormal));
+	normal.w = 0;
 
 	tangent = mul(tangent, matNormal);
-	tangent.w = 0;
 	tangent = normalize(tangent);
+	tangent.w = 0;
 
-	float posw = mul(pos, matW);
-	outData.eyev = normalize(posw - eyePos);
+	float4 eye = normalize(mul(pos, matW) - eyePos);
+	outData.eyev = eye;
 
 	outData.Neyev.x = dot(outData.eyev, tangent);
 	outData.Neyev.y = dot(outData.eyev, binormal);
@@ -83,7 +82,7 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL,fl
 
 	outData.light.x = dot(light, tangent);
 	outData.light.y = dot(light, binormal);
-	outData.light.z = dot(light, normal);
+	outData.light.z = dot(light, outData.normal);
 	outData.light.w = 0;
 
 	return outData;
@@ -100,8 +99,6 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 ambient;
 	float4 Specular;
 	
-
-
 	if (hasNormalMap){
 		
 
@@ -123,9 +120,7 @@ float4 PS(VS_OUT inData) : SV_Target
 			diffuse = lightSource * diffuseColor * NL;
 			ambient = lightSource * diffuseColor * ambientColor;
 		}
-
-		
-		return   Specular;
+		return   NL;
 	}
 	else
 	{
@@ -142,9 +137,6 @@ float4 PS(VS_OUT inData) : SV_Target
 			diffuse = lightSource * g_texture.Sample(g_sampler, inData.uv) * inData.color;
 			ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambientColor;
 		}
-		 return   Specular ;
-	
-
-		
+		 return   diffuse +ambient+Specular ;
 	}
 }
