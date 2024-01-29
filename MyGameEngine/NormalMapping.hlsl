@@ -68,9 +68,9 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL,fl
 	float4 eye = normalize(mul(pos, matW) - eyePos);
 	outData.eyev = eye;
 
-	outData.Neyev.x = dot(outData.eyev, tangent);
-	outData.Neyev.y = dot(outData.eyev, binormal);
-	outData.Neyev.z = dot(outData.eyev, normal);
+	outData.Neyev.x = dot(eye, tangent);
+	outData.Neyev.y = dot(eye, binormal);
+	outData.Neyev.z = dot(eye, outData.normal);
 	outData.Neyev.w = 0;
 
 	float4 light = normalize(lightPos);
