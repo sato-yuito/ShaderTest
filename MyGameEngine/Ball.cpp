@@ -13,7 +13,7 @@ Ball::~Ball()
 void Ball::Initialize()
 {
     //モデルデータのロード
-    hModel_ = Model::Load("Assets/ball.fbx");
+    hModel_ = Model::Load("Assets/saikoro.fbx");
     assert(hModel_ >= 0);
     transform_.position_ = { 0,2,0 };
     transform_.rotate_ = { 0,0,0 };
