@@ -13,18 +13,18 @@ Ball::~Ball()
 void Ball::Initialize()
 {
     //モデルデータのロード
-    hModel_ = Model::Load("Assets/Dice.fbx");
+    hModel_ = Model::Load("Assets/Ball.fbx");
     assert(hModel_ >= 0);
-    transform_.position_ = { 0,2,0 };
+    //transform_.position_ = { 0,2,0 };
     transform_.rotate_ = { 0,0,0 };
-    transform_.scale_ = { 1,1,1 };
+    //transform_.scale_ = { 1,1,1 };
 }
 
 void Ball::Update()
 {
     
     
-        transform_.rotate_.y += 0.5f;
+        //transform_.rotate_.y += 0.5f;
     
 
   

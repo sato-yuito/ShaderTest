@@ -4,6 +4,7 @@
 #include"Stage.h"
 #include"Ball.h"
 #include"Arrow.h"
+#include"Dice.h"
 #include"Engine/Camera.h"
 TestScene::TestScene(GameObject* parent)
 	:GameObject(parent,"TestScene")
@@ -14,9 +15,7 @@ void TestScene::Initialize()
 {
 	Instantiate<Stage>(this);
 	Instantiate<Ball>(this);
-	Instantiate<Arrow>(this);
-
-	
+	Instantiate<Dice>(this);
 }
 
 void TestScene::Update()
