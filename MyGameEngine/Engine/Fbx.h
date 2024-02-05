@@ -32,6 +32,7 @@ class Fbx
 		XMFLOAT4	diffuseColor;		// ディフューズカラー（マテリアルの色）
 		XMFLOAT4    ambientColor;
 		XMFLOAT4    speculerColor;
+		XMFLOAT4    scroll;
 		float       shininess;
 		BOOL 	    isTexture;		// テクスチャ貼ってあるかどうか
 		BOOL        hasNormalMap;

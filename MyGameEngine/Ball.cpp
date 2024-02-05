@@ -13,10 +13,10 @@ Ball::~Ball()
 void Ball::Initialize()
 {
     //モデルデータのロード
-    hModel_ = Model::Load("Assets/Ball.fbx");
+    hModel_ = Model::Load("Assets/WaterModel.fbx");
     assert(hModel_ >= 0);
     //transform_.position_ = { 0,2,0 };
-    transform_.rotate_ = { 0,0,0 };
+    //transform_.rotate_ = { 0,0,0 };
     //transform_.scale_ = { 1,1,1 };
 }
 
