@@ -16,6 +16,7 @@ cbuffer global:register(b0)
 	float4		diffuseColor;		// ディフューズカラー（マテリアルの色）
 	float4    ambientColor;
 	float4     speculerColor;
+	float    scroll;
 	float     shininess;
 	int		isTexture;		   // テクスチャ貼ってあるかどうか
 	int     hasNormalMap;
@@ -98,11 +99,14 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 diffuse;
 	float4 ambient;
 	float4 Specular;
-	
+
+	float2 tmpNormalUV = inData.uv;
+	tmpNormalUV.x = tmpNormalUV.x + scroll;
+	tmpNormalUV.y = tmpNormalUV.y + scroll;
 	if (hasNormalMap){
 		
 
-		float4 tmpNormal = normalTeX.Sample(g_sampler, inData.uv) * 2.0f - 1.0f;
+		float4 tmpNormal = normalTeX.Sample(g_sampler, tmpNormalUV) * 2.0f - 1.0f;
 		tmpNormal = normalize(tmpNormal);
 		tmpNormal.w = 0;
 

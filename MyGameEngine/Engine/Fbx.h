@@ -32,7 +32,7 @@ class Fbx
 		XMFLOAT4	diffuseColor;		// ディフューズカラー（マテリアルの色）
 		XMFLOAT4    ambientColor;
 		XMFLOAT4    speculerColor;
-		XMFLOAT4    scroll;
+		float       scroll;
 		float       shininess;
 		BOOL 	    isTexture;		// テクスチャ貼ってあるかどうか
 		BOOL        hasNormalMap;
@@ -52,6 +52,8 @@ class Fbx
 	int polygonCount_;	//ポリゴンの数
 	int materialCount_;	//マテリアルの個数
 
+	float scrollValX_;
+	float scrollValY_;
 
 	ID3D11Buffer* pVertexBuffer_;
 	ID3D11Buffer** pIndexBuffer_;
@@ -63,6 +65,7 @@ class Fbx
 	void IntConstantBuffer();
 	void InitMaterial(fbxsdk::FbxNode* pNode);
 	Texture* pToonTex_;
+	
 public:
 
 	Fbx();
