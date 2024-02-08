@@ -302,8 +302,8 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 
 void Fbx::Draw(Transform& transform)
 {
-	scrollValX_ +=  0.0003f;
-	scrollValY_  +=  0.0004f;
+	scrollValX_ +=  0.003f;
+	scrollValY_  +=  0.004f;
 	Direct3D::SetShader(SHADER_NORMALMAP);
 
 	transform.Calclation();//トランスフォームを計算
