@@ -16,7 +16,8 @@ cbuffer global:register(b0)
 	float4		diffuseColor;		// ディフューズカラー（マテリアルの色）
 	float4    ambientColor;
 	float4     speculerColor;
-	float    scroll;
+	float    scrollX;
+	float    scrollY;
 	float     shininess;
 	int		isTexture;		   // テクスチャ貼ってあるかどうか
 	int     hasNormalMap;
@@ -94,21 +95,24 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL,fl
 //───────────────────────────────────────
 float4 PS(VS_OUT inData) : SV_Target
 {
-
 	float4 lightSource = float4(1.0, 1.0, 1.0, 1.0);
 	float4 diffuse;
 	float4 ambient;
 	float4 Specular;
 
 	float2 tmpNormalUV = inData.uv;
-	tmpNormalUV.x = tmpNormalUV.x + scroll;
-	tmpNormalUV.y = tmpNormalUV.y + scroll;
+	tmpNormalUV.x = tmpNormalUV.x + scrollX;
+	tmpNormalUV.y = tmpNormalUV.y + scrollY;
+	float2 tmpNormalxy = normalize(tmpNormalUV.x + tmpNormalUV.y);
+	
 	if (hasNormalMap){
 		
-
 		float4 tmpNormal = normalTeX.Sample(g_sampler, tmpNormalUV) * 2.0f - 1.0f;
-		tmpNormal = normalize(tmpNormal);
+		float4 tmpNormal2 = normalTeX.Sample(g_sampler,  tmpNormalxy) * 2.0f - 1.0f;
 		tmpNormal.w = 0;
+		tmpNormal2.w = 0;
+		tmpNormal = normalize(tmpNormal+ tmpNormal2);
+		
 
 		float4 NL = clamp(dot(normalize(inData.light), tmpNormal), 0, 1);
 
@@ -124,8 +128,7 @@ float4 PS(VS_OUT inData) : SV_Target
 			diffuse = lightSource * diffuseColor * NL;
 			ambient = lightSource * diffuseColor * ambientColor;
 		}
-		//return g_texture.Sample(g_sampler, inData.uv);
-
+		
 		return  diffuse +ambient + Specular;
 	}
 	else
@@ -143,9 +146,8 @@ float4 PS(VS_OUT inData) : SV_Target
 			diffuse = lightSource * g_texture.Sample(g_sampler, inData.uv) * inData.color;
 			ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambientColor;
 		}
-		float4 result = diffuse +ambient+Specular ;
-		if (isTexture)
-			result.a = inData.uv;
+		float4 result = diffuse +ambient+Specular;
+		result.a = (result.r+result.g+result.b)/3;
 		return result;
 	}
 }

@@ -302,8 +302,8 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 
 void Fbx::Draw(Transform& transform)
 {
-	scrollValX_ = scrollValX_ + 0.05f;
-	scrollValY_  = scrollValY_ + 0.04f;
+	scrollValX_ +=  0.0003f;
+	scrollValY_  +=  0.0004f;
 	Direct3D::SetShader(SHADER_NORMALMAP);
 
 	transform.Calclation();//トランスフォームを計算
@@ -319,8 +319,8 @@ void Fbx::Draw(Transform& transform)
 	  cb.speculerColor = pMaterialList_[i].specular;
 	  cb.shininess = pMaterialList_[i].shininess;
 	  cb.diffuseColor = pMaterialList_[i].diffuse;
-	  cb.scroll = scrollValX_;
-	  cb.scroll = scrollValY_;
+	  cb.scrollX = scrollValX_;
+	  cb.scrollY = scrollValY_;
 	  cb.isTexture = pMaterialList_[i].pTexture != nullptr;
 	  cb.hasNormalMap = pMaterialList_[i].pNormalTexture != nullptr;
 	
