@@ -147,7 +147,7 @@ float4 PS(VS_OUT inData) : SV_Target
 			ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambientColor;
 		}
 		float4 result = Specular;
-		result.a = ((result.r + result.g + result.b) / 3)*1.5;
+		result.a = ((result.r + result.g + result.b) / 3)*3.5;
 
 		return result;
 	}
