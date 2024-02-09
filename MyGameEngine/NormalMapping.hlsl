@@ -103,12 +103,12 @@ float4 PS(VS_OUT inData) : SV_Target
 	float2 tmpNormalUV = inData.uv;
 	tmpNormalUV.x = tmpNormalUV.x + scrollX;
 	tmpNormalUV.y = tmpNormalUV.y + scrollY;
-	float2 tmpNormalxy = normalize(tmpNormalUV.x + tmpNormalUV.y);
+	
 	
 	if (hasNormalMap){
 		
 		float4 tmpNormal = normalTeX.Sample(g_sampler, tmpNormalUV) * 2.0f - 1.0f;
-		float4 tmpNormal2 = normalTeX.Sample(g_sampler,  tmpNormalxy) * 2.0f - 1.0f;
+		float4 tmpNormal2 = normalTeX.Sample(g_sampler,  (float2)()) * 2.0f - 1.0f;
 		tmpNormal.w = 0;
 		tmpNormal2.w = 0;
 		tmpNormal = normalize(tmpNormal+ tmpNormal2);
