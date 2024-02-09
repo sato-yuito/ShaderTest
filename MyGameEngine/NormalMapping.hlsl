@@ -108,7 +108,7 @@ float4 PS(VS_OUT inData) : SV_Target
 	if (hasNormalMap){
 		
 		float4 tmpNormal = normalTeX.Sample(g_sampler, tmpNormalUV) * 2.0f - 1.0f;
-		float4 tmpNormal2 = normalTeX.Sample(g_sampler,  (float2)()) * 2.0f - 1.0f;
+		float4 tmpNormal2 = normalTeX.Sample(g_sampler, inData.uv+(float2)(scrollX *0.4 +(-scrollY) * 0.4)) * 2.0f - 1.0f;
 		tmpNormal.w = 0;
 		tmpNormal2.w = 0;
 		tmpNormal = normalize(tmpNormal+ tmpNormal2);
@@ -146,8 +146,9 @@ float4 PS(VS_OUT inData) : SV_Target
 			diffuse = lightSource * g_texture.Sample(g_sampler, inData.uv) * inData.color;
 			ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambientColor;
 		}
-		float4 result = diffuse +ambient+Specular;
-		result.a = (result.r+result.g+result.b)/3;
+		float4 result = Specular;
+		result.a = ((result.r + result.g + result.b) / 3)*1.5;
+
 		return result;
 	}
 }
