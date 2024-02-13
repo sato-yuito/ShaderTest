@@ -104,7 +104,6 @@ float4 PS(VS_OUT inData) : SV_Target
 	tmpNormalUV.x = tmpNormalUV.x + scrollX;
 	tmpNormalUV.y = tmpNormalUV.y + scrollY;
 	
-	
 	if (hasNormalMap){
 		
 		float4 tmpNormal = normalTeX.Sample(g_sampler, tmpNormalUV) * 2.0f - 1.0f;
@@ -118,37 +117,33 @@ float4 PS(VS_OUT inData) : SV_Target
 
 		float4 reflection = reflect(normalize(inData.light), tmpNormal);
 		float4 Specular = pow(saturate(dot(reflection, inData.Neyev)), shininess) * speculerColor;
-		if (isTexture!=0)
-		{
+		if (isTexture!=0){
 			diffuse = lightSource*g_texture.Sample(g_sampler, inData.uv) * NL;
 			ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambientColor;
 		}
-		else
-		{
+		else{
 			diffuse = lightSource * diffuseColor * NL;
 			ambient = lightSource * diffuseColor * ambientColor;
 		}
 		
 		return  diffuse +ambient + Specular;
 	}
-	else
-	{
-		float4 reflection = reflect(normalize(lightPos), inData.normal);
+	else{
+			float4 reflection = reflect(normalize(lightPos), inData.normal);
 
-		float4 Specular = pow(saturate(dot(reflection, inData.eyev)), shininess) * speculerColor;
-		if (isTexture==0)
-		{
-			diffuse = lightSource * diffuseColor * inData.color;
-			ambient = lightSource * diffuseColor * ambientColor;
+			float4 Specular = pow(saturate(dot(reflection, inData.eyev)), shininess) * speculerColor;
+			if (isTexture==0)
+			{
+				diffuse = lightSource * diffuseColor * inData.color;
+				ambient = lightSource * diffuseColor * ambientColor;
+			}
+		else{
+				diffuse = lightSource * g_texture.Sample(g_sampler, inData.uv) * inData.color;
+				ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambientColor;
 		}
-		else
-		{
-			diffuse = lightSource * g_texture.Sample(g_sampler, inData.uv) * inData.color;
-			ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambientColor;
-		}
-		float4 result = Specular;
-		result.a = ((result.r + result.g + result.b) / 3)*3.5;
+			float4 result = Specular;
+			result.a = ((result.r + result.g + result.b) / 3)*3.5;
 
-		return result;
+			return result.a;
 	}
 }
